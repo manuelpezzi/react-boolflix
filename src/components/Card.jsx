@@ -1,9 +1,10 @@
-// src/components/Card.jsx
+
 import React from 'react';
 import { useAppContext } from '../context/AppContext';
+import ReactCountryFlag from 'react-country-flag';
 
 function Card({ item }) {
-    const { flags, isAvailable } = useAppContext();
+    const { isAvailable } = useAppContext();
 
     if (!isAvailable) {
         return (
@@ -15,9 +16,7 @@ function Card({ item }) {
         );
     }
 
-    const getFlag = (language) => {
-        return flags[language] || language;
-    };
+
 
     const renderStars = (vote) => {
         const starsCount = Math.round(vote / 2);
@@ -30,6 +29,19 @@ function Card({ item }) {
             );
         }
         return stars;
+    };
+    const languageToCountryCode = {
+        en: 'US',
+        es: 'ES',
+        it: 'IT',
+        fr: 'FR',
+        de: 'DE',
+        ja: 'JP',
+
+    };
+
+    const getCountryCode = (language) => {
+        return languageToCountryCode[language] || null;
     };
 
     return (
@@ -49,7 +61,22 @@ function Card({ item }) {
                         <strong>Titolo originale:</strong> {item.original_title}
                     </p>
                     <p>
-                        <strong>Lingua:</strong> {getFlag(item.language)}
+                        <strong>Lingua:</strong>{' '}
+                        {item.language && getCountryCode(item.language.toLowerCase()) ? (
+                            <ReactCountryFlag
+                                countryCode={getCountryCode(item.language.toLowerCase())}
+                                svg
+                                style={{
+                                    width: '1.5em',
+                                    height: '1.5em',
+                                    verticalAlign: 'middle',
+                                    marginLeft: '5px',
+                                }}
+                                title={item.language.toUpperCase()}
+                            />
+                        ) : (
+                            item.language || 'N/A'
+                        )}
                     </p>
                     <p>
                         <strong>Voto:</strong> {renderStars(item.vote)}

@@ -1,4 +1,4 @@
-// src/context/AppContext.jsx
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 export const AppContext = createContext();
@@ -42,12 +42,7 @@ const AppProvider = ({ children }) => {
     const apiKey = 'db4677eb1dd3793faea12db0edc4bc59';
     const baseImgUrl = 'https://image.tmdb.org/t/p/w342';
 
-    const flags = {
-        'en': '🇺🇸',
-        'es': '🇪🇸',
-        'it': '🇮🇹',
-        'fr': '🇫🇷',
-    };
+
 
     // Carica i generi disponibili all'avvio
     useEffect(() => {
@@ -211,7 +206,6 @@ const AppProvider = ({ children }) => {
         isSearching,
         selectedGenre,
         setSelectedGenre,
-        flags,
         genres,
         error,
     };

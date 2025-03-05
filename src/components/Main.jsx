@@ -1,5 +1,5 @@
 
-// src/components/Main.jsx
+
 import React from 'react';
 import { useAppContext } from '../context/AppContext';
 import ResultSection from './ResultSection';
@@ -10,9 +10,11 @@ function Main() {
 
     if (!isAvailable) {
         return (
-            <main className="container py-4">
-                <div className="alert alert-danger" role="alert">
-                    Errore: Main deve essere usato all'interno di un AppProvider.
+            <main >
+                <div className='container py-4'>
+                    <div className="alert alert-danger" role="alert">
+                        Errore: Main deve essere usato all'interno di un AppProvider.
+                    </div>
                 </div>
             </main>
         );
@@ -29,7 +31,7 @@ function Main() {
                 )}
                 {movies.length === 0 && series.length === 0 ? (
                     <div className="text-center my-5">
-                        <p>Nessun risultato trovato. Prova con un'altra ricerca.</p>
+                        <p className='text-none'>Nessun risultato trovato. Prova con un'altra ricerca.</p>
                     </div>
                 ) : (
                     <>

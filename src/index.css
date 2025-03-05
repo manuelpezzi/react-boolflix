@@ -4,9 +4,14 @@
 }
 
 body {
-    background-color: #141414;
+    background-color: rgba(0, 0, 0, 0.9) !important;
     color: white;
     margin: 0;
+
+}
+
+.text-none {
+    font-size: 3rem;
 }
 
 header {
@@ -33,6 +38,7 @@ main {
     padding-top: 20px;
     background-color: rgba(0, 0, 0, 0.9);
     color: white;
+    min-height: 913px;
 }
 
 .filters {

@@ -17,7 +17,7 @@ function SearchBar() {
         setSelectedGenre('');
     };
 
-    const handleKeyPress = (e) => {
+    const handleKeyDown = (e) => {
         if (e.key === 'Enter') {
             setSearch(e.target.value);
             setSelectedGenre('');
@@ -37,7 +37,7 @@ function SearchBar() {
                 placeholder="Cerca un film o una serie..."
                 value={search}
                 onChange={handleSearch}
-                onKeyPress={handleKeyPress}
+                onKeyDown={handleKeyDown}
             />
             <button className="btn btn-primary" onClick={() => setSearch(search)}>
                 Cerca
