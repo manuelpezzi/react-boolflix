@@ -2,3 +2,130 @@
     min-height: 100vh;
 
 }
+
+body {
+    background-color: #141414;
+    color: white;
+    margin: 0;
+}
+
+header {
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background-color: #141414;
+}
+
+.logo {
+    color: #e50914;
+    font-size: 2rem;
+    font-weight: bold;
+
+}
+
+.search-bar {
+    width: 300px;
+}
+
+main {
+    padding-top: 20px;
+    background-color: rgba(0, 0, 0, 0.9);
+    color: white;
+}
+
+.filters {
+    background-color: #222;
+    padding: 1rem;
+    border-radius: 5px;
+}
+
+.card-netflix {
+    height: 500px;
+    border: none;
+    position: relative;
+    transition: transform 0.3s ease;
+    background-color: #222;
+
+}
+
+.card-netflix:hover {
+    transform: scale(1.05);
+}
+
+.card-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 1rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    overflow-y: auto;
+
+}
+
+.card-netflix:hover .card-overlay {
+    opacity: 1;
+}
+
+.card-title {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.card-text {
+    font-size: 0.9rem;
+}
+
+.star {
+    color: #ccc;
+    font-size: 1.2rem;
+
+}
+
+.star.filled {
+    color: #ffd700;
+}
+
+.search-bar .form-control {
+    background-color: #333;
+    border: none;
+    color: #fff;
+}
+
+.search-bar .form-control::placeholder {
+    color: #aaa;
+}
+
+.search-bar .btn-primary {
+    background-color: #e50914;
+    border: none;
+}
+
+.search-bar .btn-secondary {
+    background-color: #666;
+    border: none;
+}
+
+.genre-filter {
+    width: 150px;
+    margin-left: 10px;
+}
+
+.genre-filter .form-select {
+    background-color: #333;
+    border: none;
+    color: #fff;
+    height: 38px;
+    font-size: 0.9rem;
+}
+
+.genre-filter .form-select option {
+    background-color: #333;
+    color: #fff;
+}

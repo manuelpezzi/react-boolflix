@@ -1,13 +1,11 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+// src/context/AppContext.jsx
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
-// Creazione del contesto
 export const AppContext = createContext();
 
-// Custom Hook
 const useAppContext = () => {
     const context = useContext(AppContext);
 
-    // Se il contesto non è disponibile, restituiamo un oggetto predefinito
     if (!context) {
         return {
             movies: [],
@@ -40,16 +38,18 @@ const AppProvider = ({ children }) => {
     const [selectedGenre, setSelectedGenre] = useState('');
     const [genres, setGenres] = useState([]);
     const [error, setError] = useState(null);
+
     const apiKey = 'db4677eb1dd3793faea12db0edc4bc59';
     const baseImgUrl = 'https://image.tmdb.org/t/p/w342';
 
     const flags = {
-        en: 'US',
-        es: 'ES',
-        it: 'IT',
-        fr: 'FR',
+        'en': '🇺🇸',
+        'es': '🇪🇸',
+        'it': '🇮🇹',
+        'fr': '🇫🇷',
     };
 
+    // Carica i generi disponibili all'avvio
     useEffect(() => {
         const fetchGenres = () => {
             setIsLoading(true);
@@ -89,55 +89,114 @@ const AppProvider = ({ children }) => {
         fetchGenres();
     }, []);
 
+    // Effettua la ricerca o il filtro per genere quando cambiano search o selectedGenre
     useEffect(() => {
         const fetchMedia = () => {
-            if (!search && !selectedGenre) return;
             setIsLoading(true);
             setIsSearching(true);
             setError(null);
-            const genreParam = selectedGenre ? `&with_genres=${selectedGenre}` : '';
-            fetch(`https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&language=it_IT&query=${search}${genreParam}`)
-                .then(response => response.json())
-                .then(movieData => {
-                    fetch(`https://api.themoviedb.org/3/search/tv?api_key=${apiKey}&language=it_IT&query=${search}${genreParam}`)
-                        .then(response => response.json())
-                        .then(tvData => {
-                            const normalizedMovies = movieData.results.map(item => ({
-                                title: item.title,
-                                original_title: item.original_title,
-                                language: item.original_language,
-                                vote: item.vote_average,
-                                poster: item.poster_path ? `${baseImgUrl}${item.poster_path}` : null,
-                                type: 'Movie',
-                                overview: item.overview,
-                            }));
-                            const normalizedSeries = tvData.results.map(item => ({
-                                title: item.name,
-                                original_title: item.original_name,
-                                language: item.original_language,
-                                vote: item.vote_average,
-                                poster: item.poster_path ? `${baseImgUrl}${item.poster_path}` : null,
-                                type: 'Series',
-                                overview: item.overview,
-                            }));
-                            setMovies(normalizedMovies);
-                            setSeries(normalizedSeries);
-                            setIsLoading(false);
-                            setIsSearching(false);
-                        })
-                        .catch(err => {
-                            setError('Errore nel caricamento dei media');
-                            setIsLoading(false);
-                            setIsSearching(false);
-                            console.error('Errore nel caricamento dei media:', err);
-                        });
-                })
-                .catch(err => {
-                    setError('Errore nel caricamento dei media');
-                    setIsLoading(false);
-                    setIsSearching(false);
-                    console.error('Errore nel caricamento dei media:', err);
-                });
+
+            // Se c'è una ricerca testuale, usiamo /search/movie e /search/tv
+            if (search) {
+                fetch(`https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&language=it_IT&query=${search}`)
+                    .then(response => response.json())
+                    .then(movieData => {
+                        fetch(`https://api.themoviedb.org/3/search/tv?api_key=${apiKey}&language=it_IT&query=${search}`)
+                            .then(response => response.json())
+                            .then(tvData => {
+                                const normalizedMovies = movieData.results.map(item => ({
+                                    title: item.title,
+                                    original_title: item.original_title,
+                                    language: item.original_language,
+                                    vote: item.vote_average,
+                                    poster: item.poster_path ? `${baseImgUrl}${item.poster_path}` : null,
+                                    type: 'Movie',
+                                    overview: item.overview,
+                                }));
+
+                                const normalizedSeries = tvData.results.map(item => ({
+                                    title: item.name,
+                                    original_title: item.original_name,
+                                    language: item.original_language,
+                                    vote: item.vote_average,
+                                    poster: item.poster_path ? `${baseImgUrl}${item.poster_path}` : null,
+                                    type: 'Series',
+                                    overview: item.overview,
+                                }));
+
+                                setMovies(normalizedMovies);
+                                setSeries(normalizedSeries);
+                                setIsLoading(false);
+                                setIsSearching(false);
+                            })
+                            .catch(err => {
+                                setError('Errore nella ricerca delle serie. Riprova più tardi.');
+                                setIsLoading(false);
+                                setIsSearching(false);
+                                console.error('Errore nella ricerca delle serie:', err);
+                            });
+                    })
+                    .catch(err => {
+                        setError('Errore nella ricerca dei film. Riprova più tardi.');
+                        setIsLoading(false);
+                        setIsSearching(false);
+                        console.error('Errore nella ricerca dei film:', err);
+                    });
+            }
+            // Se non c'è una ricerca testuale ma c'è un filtro per genere, usiamo /discover/movie e /discover/tv
+            else if (selectedGenre) {
+                fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=it_IT&with_genres=${selectedGenre}`)
+                    .then(response => response.json())
+                    .then(movieData => {
+                        fetch(`https://api.themoviedb.org/3/discover/tv?api_key=${apiKey}&language=it_IT&with_genres=${selectedGenre}`)
+                            .then(response => response.json())
+                            .then(tvData => {
+                                const normalizedMovies = movieData.results.map(item => ({
+                                    title: item.title,
+                                    original_title: item.original_title,
+                                    language: item.original_language,
+                                    vote: item.vote_average,
+                                    poster: item.poster_path ? `${baseImgUrl}${item.poster_path}` : null,
+                                    type: 'Movie',
+                                    overview: item.overview,
+                                }));
+
+                                const normalizedSeries = tvData.results.map(item => ({
+                                    title: item.name,
+                                    original_title: item.original_name,
+                                    language: item.original_language,
+                                    vote: item.vote_average,
+                                    poster: item.poster_path ? `${baseImgUrl}${item.poster_path}` : null,
+                                    type: 'Series',
+                                    overview: item.overview,
+                                }));
+
+                                setMovies(normalizedMovies);
+                                setSeries(normalizedSeries);
+                                setIsLoading(false);
+                                setIsSearching(false);
+                            })
+                            .catch(err => {
+                                setError('Errore nel filtraggio delle serie per genere. Riprova più tardi.');
+                                setIsLoading(false);
+                                setIsSearching(false);
+                                console.error('Errore nel filtraggio delle serie per genere:', err);
+                            });
+                    })
+                    .catch(err => {
+                        setError('Errore nel filtraggio dei film per genere. Riprova più tardi.');
+                        setIsLoading(false);
+                        setIsSearching(false);
+                        console.error('Errore nel filtraggio dei film per genere:', err);
+                    });
+            }
+            // Se non ci sono né ricerca né filtro, svuotiamo i risultati
+            else {
+                setMovies([]);
+                setSeries([]);
+                setIsLoading(false);
+                setIsSearching(false);
+            }
         };
 
         fetchMedia();

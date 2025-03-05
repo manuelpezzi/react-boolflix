@@ -19,27 +19,43 @@ function Card({ item }) {
         return flags[language] || language;
     };
 
-    const formatVote = (vote) => {
-        return vote ? vote.toFixed(1) : 'N/A';
+    const renderStars = (vote) => {
+        const starsCount = Math.round(vote / 2);
+        const stars = [];
+        for (let i = 0; i < 5; i++) {
+            stars.push(
+                <span key={i} className={i < starsCount ? 'star filled' : 'star'}>
+                    ★
+                </span>
+            );
+        }
+        return stars;
     };
 
     return (
         <div className="col">
-            <div className="card h-100">
-                {item.poster && (
-                    <img
-                        src={item.poster}
-                        className="card-img-top"
-                        alt={`${item.title} poster`}
-                    />
-                )}
-                <div className="card-body">
+            <div
+                className="card-netflix"
+                style={{
+                    backgroundImage: item.poster ? `url(${item.poster})` : 'none',
+                    backgroundSize: 'contain',
+                    backgroundPosition: 'center',
+                    backgroundRepeat: 'no-repeat'
+                }}
+            >
+                <div className="card-overlay">
                     <h5 className="card-title">{item.title}</h5>
-                    <p className="card-text">
-                        <strong>Titolo originale:</strong> {item.original_title}<br />
-                        <strong>Lingua:</strong> {getFlag(item.language)}<br />
-                        <strong>Voto:</strong> {formatVote(item.vote)}<br />
-                        <strong>Tipo:</strong> {item.type}
+                    <p>
+                        <strong>Titolo originale:</strong> {item.original_title}
+                    </p>
+                    <p>
+                        <strong>Lingua:</strong> {getFlag(item.language)}
+                    </p>
+                    <p>
+                        <strong>Voto:</strong> {renderStars(item.vote)}
+                    </p>
+                    <p>
+                        <strong>Overview:</strong> {item.overview || 'Non disponibile'}
                     </p>
                 </div>
             </div>
