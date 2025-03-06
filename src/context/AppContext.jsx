@@ -39,8 +39,8 @@ const AppProvider = ({ children }) => {
     const [genres, setGenres] = useState([]);
     const [error, setError] = useState(null);
 
-    const apiKey = 'db4677eb1dd3793faea12db0edc4bc59';
-    const baseImgUrl = 'https://image.tmdb.org/t/p/w342';
+    const apiKey = import.meta.env.VITE_APP_API_KEY
+    const baseImgUrl = import.meta.env.VITE_APP_BASE_IMG_URL;
 
 
 
