@@ -5,7 +5,11 @@ import FilterSelect from './filterSelect'
 import Loader from './Loader';
 
 function Header() {
-    const { isLoading, isAvailable } = useAppContext();
+    const { isLoading, isAvailable, setSearch, setSelectedGenre } = useAppContext();
+    const handleReset = () => {
+        setSearch('');
+        setSelectedGenre('');
+    };
 
     if (!isAvailable) {
         return (
@@ -19,7 +23,7 @@ function Header() {
 
     return (
         <header className="bg-dark text-white p-3 d-flex justify-content-between align-items-center">
-            <h1 className="logo m-0">BOOLFLIX</h1>
+            <h1 className="logo m-0" onClick={handleReset}>BOOLFLIX</h1>
             {isLoading && <Loader />}
             <div className="d-flex align-items-center">
                 <div className="search-bar">
